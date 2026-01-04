@@ -1,0 +1,28 @@
+{
+  "name": "saudi-address-pro",
+  "version": "1.0.0",
+  "description": "The smartest address verification widget for Saudi e-commerce. Auto-fills National Addresses from SPL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaudiAddressPro/saudi-address-pro-js.git"
+  },
+  "keywords": [
+    "saudi",
+    "address",
+    "spl",
+    "national address",
+    "verification",
+    "ecommerce",
+    "checkout"
+  ],
+  "author": "Saudi Address Pro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SaudiAddressPro/saudi-address-pro-js/issues"
+  },
+  "homepage": "https://saudiaddresspro.com"
+}
