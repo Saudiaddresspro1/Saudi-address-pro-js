@@ -11,7 +11,6 @@ Saudi Address Pro automatically validates and auto-fills Saudi National Addresse
 
 🔗 **[Try the Live Demo](https://saudiaddresspro.com)**
 
-![Saudi Address Pro Widget Demo](https://github.com/Saudiaddresspro1/saudi-address-pro-js/blob/main/widget-demo.webp?raw=true)
 
 ---
 
