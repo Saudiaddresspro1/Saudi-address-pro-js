@@ -67,6 +67,32 @@ Simply add this script to your checkout page header:
 </script>
 ```
 
+## ⚡ How to load ONLY for Saudi Arabia
+
+Building a global checkout? You don't need to load this script for customers in London or New York.
+
+Here is the standard recipe to conditionally load the widget **only** when the user selects "Saudi Arabia" (SA).
+
+```javascript
+const countrySelect = document.getElementById('billing_country');
+
+countrySelect.addEventListener('change', (e) => {
+  if (e.target.value === 'SA') {
+    // 1. Load the script dynamically
+    const script = document.createElement('script');
+    script.src = 'https://cdn.saudiaddresspro.com/widget/v1.js';
+    script.onload = () => {
+      // 2. Initialize the widget once loaded
+      new SaudiAddress({ selector: '#address-input', apiKey: 'YOUR_KEY' });
+    };
+    document.head.appendChild(script);
+  }
+});
+```
+
+This ensures **zero performance impact** for your non-Saudi customers.
+
+
 ---
 
 ## 🛡️ Fail-Safe Guarantee (Zero Blocking)
@@ -89,6 +115,53 @@ window.SaudiAddressPro.init({
   // ...
 });
 ```
+
+
+---
+
+## 💻 Quick Start
+
+### 1. The "Free" Version (Format Validation Only)
+You can use the SDK for free to validate the *format* of Saudi Short Addresses.
+
+```javascript
+import { SaudiAddress } from 'saudi-address-pro';
+
+// Initialize in "Dumb Mode" (No API Key)
+const addressWidget = new SaudiAddress({
+  selector: '#address-input'
+});
+
+// Result: Ensures user types 4 letters + 4 numbers.
+```
+
+### 2. The "Pro" Version (Full Verification & Auto-fill)
+Get your API Key at [saudiaddresspro.com](https://saudiaddresspro.com) to unlock the magic.
+
+```javascript
+const addressWidget = new SaudiAddress({
+  selector: '#address-input',
+  apiKey: 'YOUR_API_KEY_HERE', // Get this from saudiaddresspro.com
+  
+  // Optional: Map fields to auto-fill your form
+  fields: {
+    city: '#billing_city',
+    district: '#billing_district',
+    zip: '#billing_postcode',
+    street: '#billing_street1'
+  }
+});
+```
+
+**That's it.** When a user types `RCTB4359`, your form fills itself.
+
+---
+
+## 🧩 Supported Platforms
+
+*   **HTML/JS:** Native support (see above).
+*   **React:** `<SaudiAddressWidget />` component included.
+*   **Vue:** Vue plugin included.
 
 ---
 
