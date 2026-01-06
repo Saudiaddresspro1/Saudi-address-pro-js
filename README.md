@@ -67,9 +67,11 @@ Simply add this script to your checkout page header:
 </script>
 ```
 
-## ⚡ How to load ONLY for Saudi Arabia
+## ⚡ How to load ONLY for Saudi Arabia "Smart Country Detection"
 
-Building a global checkout? You don't need to load this script for customers in London or New York.
+Building a global forms? You don't need to load this script for customers in London or New York.
+
+The widget automatically activates only when Saudi Arabia is selected - your international customers in London or Tokyo see their normal checkout flow with zero performance impact.
 
 Here is the standard recipe to conditionally load the widget **only** when the user selects "Saudi Arabia" (SA).
 
@@ -89,6 +91,8 @@ countrySelect.addEventListener('change', (e) => {
   }
 });
 ```
+
+**Result:** Saudi customers get full autocomplete. Everyone else - zero extra JavaScript loaded.
 
 This ensures **zero performance impact** for your non-Saudi customers.
 
