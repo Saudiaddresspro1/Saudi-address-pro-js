@@ -1,28 +1,79 @@
 {
   "name": "saudi-address-pro",
-  "version": "1.0.0",
-  "description": "The smartest address verification widget for Saudi e-commerce. Auto-fills National Addresses from SPL.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "1.0.2",
+  "description": "Saudi National Address (SPL) autocomplete and validation widget for React, Vue, and vanilla JS",
+  "author": "Saudi Address Pro <hello@saudiaddresspro.com>",
+  "license": "MIT",
+  "homepage": "https://saudiaddresspro.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SaudiAddressPro/saudi-address-pro-js.git"
+    "url": "git+https://github.com/Saudiaddresspro1/Saudi-address-pro-js.git"
   },
   "keywords": [
     "saudi",
     "address",
-    "spl",
-    "national address",
-    "verification",
-    "ecommerce",
-    "checkout"
+    "SPL",
+    "national-address",
+    "autocomplete",
+    "validation",
+    "saudi-post",
+    "react",
+    "vue",
+    "widget"
   ],
-  "author": "Saudi Address Pro",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SaudiAddressPro/saudi-address-pro-js/issues"
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
+    },
+    "./vue": {
+      "types": "./dist/vue.d.ts",
+      "import": "./dist/vue.mjs",
+      "require": "./dist/vue.js"
+    }
   },
-  "homepage": "https://saudiaddresspro.com"
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/react.tsx src/vue.ts --format cjs,esm --dts --clean --external react,react-dom,vue --no-config",
+    "prepublishOnly": "echo 'dist already built'"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17",
+    "vue": ">=3"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vue": "^3.0.0"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  }
 }
