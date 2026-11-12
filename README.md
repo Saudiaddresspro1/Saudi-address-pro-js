@@ -1,188 +1,169 @@
-# Saudi Address Pro (JS SDK)
+# saudi-address-pro
 
-[![TGA 2026 Compliant](https://img.shields.io/badge/TGA%202026-Compliant-green?style=flat-square)](https://saudiaddresspro.com)
-[![Arabic Support](https://img.shields.io/badge/Language-Arabic%20%2B%20English-blue?style=flat-square)](https://saudiaddresspro.com)
-[![NPM Version](https://img.shields.io/npm/v/saudi-address-pro?style=flat-square)](https://www.npmjs.com/package/saudi-address-pro)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+Saudi National Address (SPL) autocomplete and validation widget — for React, Vue 3, and vanilla JavaScript.
 
-**The smartest address verification widget for Saudi e-commerce.**
+When a user selects Saudi Arabia in your address form, a smart short-code input appears. They type a short address code (e.g. `RCTB4359`) or search by city/district, and the full verified address auto-fills instantly.
 
-Saudi Address Pro automatically validates and auto-fills Saudi National Addresses using official SPL data. It turns a complex 6-field form into a single "Short Address" lookup (e.g., `RRHA8147`), reducing typing errors by 80% and ensuring 100% delivery success.
-
-🔗 **[Try the Live Demo](https://saudiaddresspro.com)**
-
+**100 free lookups/month** included. No API key required to start.
 
 ---
 
-## 🚀 Why Use This?
+## Installation
 
-Most "Saudi Address" libraries just use Regex to check if a phone number starts with `+966`. **This is different.**
-
-We connect directly to the **Saudi Post (SPL) API** to verify that the building actually exists.
-
-| Feature | Old Way (Regex Scripts) | Saudi Address Pro (This SDK) |
-| :--- | :--- | :--- |
-| **Validation Type** | "Does it look like an address?" | "Does this building exist?" |
-| **Data Source** | None (Guesswork) | **Official SPL Government Data** |
-| **Auto-Fill** | ❌ No | ✅ **Yes (City, District, Zip, etc.)** |
-| **User Effort** | High (Type 6 fields) | **Low (Type 4 chars)** |
-| **Accuracy** | ~70% | **100% Verified** |
-
----
-
-## 📦 Installation
-
-### Option 1: NPM (Recommended for React/Vue/Next.js)
 ```bash
 npm install saudi-address-pro
-```
-
-### Option 2: CDN (Easiest for HTML/Shopify/Salla)
-Simply add this script to your checkout page header:
-```html
-<script src="https://cdn.saudiaddresspro.com/widget.js" async></script>
+# or
+yarn add saudi-address-pro
 ```
 
 ---
 
-## 🛠 Usage
+## React
 
-### Basic Example (Vanilla JS)
+```tsx
+import { SaudiAddressInput } from 'saudi-address-pro/react';
+
+function CheckoutForm() {
+  const handleSelect = (address) => {
+    console.log(address.shortCode);      // "RCTB4359"
+    console.log(address.buildingNumber); // "4359"
+    console.log(address.street);         // "King Abdul Aziz Road"
+    console.log(address.district);       // "Al Olaya"
+    console.log(address.city);           // "Riyadh"
+    console.log(address.postalCode);     // "12643"
+  };
+
+  return (
+    <form>
+      <select name="country" id="country">
+        <option value="SA">Saudi Arabia</option>
+        <option value="AE">UAE</option>
+      </select>
+
+      {/* Auto-shows when Saudi Arabia is selected */}
+      <SaudiAddressInput
+        apiKey="YOUR_API_KEY"
+        onSelect={handleSelect}
+        countryField="#country"
+        lang="en"
+      />
+    </form>
+  );
+}
+```
+
+---
+
+## Vue 3
+
+```vue
+<template>
+  <form>
+    <select v-model="country" id="country">
+      <option value="SA">Saudi Arabia</option>
+      <option value="AE">UAE</option>
+    </select>
+
+    <SaudiAddressInput
+      api-key="YOUR_API_KEY"
+      @select="onAddressSelect"
+      country-field="#country"
+      lang="en"
+    />
+  </form>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import { SaudiAddressInput } from 'saudi-address-pro/vue';
+
+const country = ref('SA');
+
+const onAddressSelect = (address) => {
+  console.log(address.shortCode);
+  console.log(address.city);
+};
+</script>
+```
+
+---
+
+## Vanilla JavaScript
+
 ```html
-<!-- 1. The Container -->
-<div id="saudi-address-widget"></div>
+<div id="address-widget"></div>
 
-<!-- 2. The Script -->
-<script>
-  window.SaudiAddressPro.init({
-    apiKey: "YOUR_PUBLIC_API_KEY", // Get one at saudiaddresspro.com
-    language: "en", // or "ar" for Arabic
-    onAddressSelected: function(address) {
-      // Auto-fill your checkout form
+<script type="module">
+  import { init } from 'saudi-address-pro';
+
+  init({
+    container: '#address-widget',
+    apiKey: 'YOUR_API_KEY',
+    lang: 'en',
+    onSelect(address) {
+      document.getElementById('short_code').value = address.shortCode;
       document.getElementById('city').value = address.city;
-      document.getElementById('district').value = address.district;
-      document.getElementById('zip').value = address.postalCode;
     }
   });
 </script>
 ```
 
-## ⚡ How to load ONLY for Saudi Arabia "Smart Country Detection"
+---
 
-Building a global forms? You don't need to load this script for customers in London or New York.
+## Props
 
-The widget automatically activates only when Saudi Arabia is selected - your international customers in London or Tokyo see their normal checkout flow with zero performance impact.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `apiKey` | `string` | — | Your API key from [saudiaddresspro.com](https://app.saudiaddresspro.com). First 100 lookups/month free without a key. |
+| `onSelect` / `@select` | `function` | required | Called when the user selects an address. Receives an `AddressResult` object. |
+| `lang` | `"en" \| "ar"` | `"en"` | Language. Arabic mode enables RTL layout automatically. |
+| `placeholder` | `string` | auto | Custom input placeholder text. |
+| `countryField` | `string` | — | CSS selector of the country dropdown. Widget shows automatically when Saudi Arabia is selected. |
+| `disabled` | `boolean` | `false` | Disables the input. |
 
-Here is the standard recipe to conditionally load the widget **only** when the user selects "Saudi Arabia" (SA).
+---
 
-```javascript
-const countrySelect = document.getElementById('billing_country');
+## AddressResult object
 
-countrySelect.addEventListener('change', (e) => {
-  if (e.target.value === 'SA') {
-    // 1. Load the script dynamically
-    const script = document.createElement('script');
-    script.src = 'https://cdn.saudiaddresspro.com/widget/v1.js';
-    script.onload = () => {
-      // 2. Initialize the widget once loaded
-      new SaudiAddress({ selector: '#address-input', apiKey: 'YOUR_KEY' });
-    };
-    document.head.appendChild(script);
-  }
-});
+```ts
+interface AddressResult {
+  shortCode: string;        // SPL short code, e.g. "RCTB4359"
+  buildingNumber: string;
+  street: string;
+  district: string;
+  city: string;
+  postalCode: string;
+  additionalNumber?: string;
+  unitNumber?: string;
+  latitude?: number;
+  longitude?: number;
+}
 ```
 
-**Result:** Saudi customers get full autocomplete. Everyone else - zero extra JavaScript loaded.
+---
 
-This ensures **zero performance impact** for your non-Saudi customers.
+## Free tier
 
+The first **100 lookups per month** work without an API key — the widget calls our demo endpoint automatically. When the free tier is exhausted, the widget displays a prompt to upgrade.
+
+Get an API key at **[app.saudiaddresspro.com](https://app.saudiaddresspro.com)** — 60-day free trial, no credit card required.
 
 ---
 
-## 🛡️ Fail-Safe Guarantee (Zero Blocking)
+## Arabic / RTL
 
-We understand that your checkout is critical. This widget is designed with a **"Fail-Open"** architecture.
-
-*   **Smart Mode:** If the API is reachable, users get the full auto-fill experience.
-*   **Fail-Safe Mode:** If the user is offline or the API is unreachable, the widget **automatically downgrades** to a standard text input.
-*   **Result:** Your customer can *always* complete their purchase. We never block the "Place Order" button.
-
----
-
-## 🇸🇦 Arabic Support (RTL)
-
-Built for the Kingdom. The widget fully supports Arabic and English with automatic RTL (Right-to-Left) layout switching.
-
-```javascript
-window.SaudiAddressPro.init({
-  language: "ar", // Switches UI to Arabic & RTL
-  // ...
-});
+```tsx
+<SaudiAddressInput
+  apiKey="YOUR_API_KEY"
+  onSelect={handleSelect}
+  lang="ar"
+/>
 ```
 
+When `lang="ar"`, the widget switches to Arabic labels and RTL layout automatically.
 
 ---
 
-## 💻 Quick Start
+## License
 
-### 1. The "Free" Version (Format Validation Only)
-You can use the SDK for free to validate the *format* of Saudi Short Addresses.
-
-```javascript
-import { SaudiAddress } from 'saudi-address-pro';
-
-// Initialize in "Dumb Mode" (No API Key)
-const addressWidget = new SaudiAddress({
-  selector: '#address-input'
-});
-
-// Result: Ensures user types 4 letters + 4 numbers.
-```
-
-### 2. The "Pro" Version (Full Verification & Auto-fill)
-Get your API Key at [saudiaddresspro.com](https://saudiaddresspro.com) to unlock the magic.
-
-```javascript
-const addressWidget = new SaudiAddress({
-  selector: '#address-input',
-  apiKey: 'YOUR_API_KEY_HERE', // Get this from saudiaddresspro.com
-  
-  // Optional: Map fields to auto-fill your form
-  fields: {
-    city: '#billing_city',
-    district: '#billing_district',
-    zip: '#billing_postcode',
-    street: '#billing_street1'
-  }
-});
-```
-
-**That's it.** When a user types `RCTB4359`, your form fills itself.
-
----
-
-## 🧩 Supported Platforms
-
-*   **HTML/JS:** Native support (see above).
-*   **React:** `<SaudiAddressWidget />` component included.
-*   **Vue:** Vue plugin included.
-
----
-
-## 🤝 Compatibility
-
-Works out of the box with:
-*   ✅ **Custom React / Vue / Angular Apps**
-*   ✅ **Shopify** (via Script Tag)
-*   ✅ **Salla** (via Custom Code)
-*   ✅ **WooCommerce** (via Header Scripts)
-*   ✅ **Magento / Adobe Commerce**
-
----
-
-## 📄 License
-
-MIT License © 2024 Saudi Address Pro.
-
-Free to use for format validation. API key required for SPL data verification.
-[Get your API Key here](https://saudiaddresspro.com).
+MIT © [Saudi Address Pro](https://saudiaddresspro.com)
